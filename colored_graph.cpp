@@ -1,73 +1,113 @@
 #include <stdio.h>
 #include <stdlib.h>
+//Autora: Letícia Karolina Moreira
 
-/*
-1 = vermelho
-2 = azul
-3 = verde
-4 = amarelo
-5 = preto
-*/
-
-typedef struct Graph
+typedef struct
 {
-	char color;
-}graph;
+	int color;
+	int value;
+	bool painted;
+}Graph;
+
 int op;
 int m;
 int n;
-int conections[5][5];
+
 int main()
 {
-	int colors[10];
-	int teste[5][5];
+	int colors = 1;
+	int value;
+	int size;
 	n = 0;
 	m = 0;
-	int value;
-	int vector[10];
-	for(n=0;n<5;n++)
+	
+	printf("Quantos elementos tera o grafo? ");
+	scanf("%d",&size);
+	
+	Graph graph[size];
+	int connections[size][size];
+	int draft[size];
+	for(n=0;n<size;n++)
 	{
 		printf("Insira o valor: ");
-		scanf("%d",&value);
-		conections[n][m] = value;
-		conections[m][n] = value;
+		scanf("%d",&graph[n].value);
+		draft[n] = graph[n].value;
 	}
-	for(m=0;m<5;m++)
+	system("pause");
+	system("cls");
+	for(m=0;m<size;m++)
 	{
-		for(n=0;n<5;n++)
+		for(n=m;n<size;n++)
 		{
-			printf("%d esta ligado a %d ? 1 - SIM | 2 - NAO: ",conections[m][0], conections[0][n]);
+			printf("%d esta ligado a %d ? SIM [1] | NAO [2]: ",draft[m], graph[n].value);
 			scanf("%d",&value);
 			if(value == 1)
 			{
-				teste[m][n] = 1;
+				connections[m][n] = 1;
+				connections[n][m] = 1;
 			}
 			else if(value == 2)
 			{
-				teste[m][n] = 0;
+				connections[m][n] = 0;
+				connections[n][m] = 0;
 			}
 			else
 			{
 				printf("\nValor invalido !\n");
 				n--;
 			}
+			system("cls");
 		}
 	}
-	for(m=0;m<5;m++)
+	for(m=0;m<size;m++)
 	{
-		for(n=0;n<5;n++)
+		for(n=0;n<size;n++)
 		{
-			printf("%d \t",teste[m][n]);
+			if(connections[m][n]==1)
+			{
+				if(graph[n].painted==true)
+				{
+					if(graph[n].color==colors)
+					{
+						colors++;	
+					}
+				}
+			}
 		}
-		printf("\n");
-	}	
+		
+		graph[m].color = colors;
+		graph[m].painted = true;
+		colors = 1;
+	}
+	for(m=0;m<size;m++)
+	{
+		printf("Valor - %d | Cor - %d\n",graph[m].value,graph[m].color);
+	}
+	printf("Ver conexoes [1] | Sair [2]: ");
+	scanf("%d",&op);
+	printf("\n\n\n\n");
+	if(op==1)
+	{
+		for(m=0;m<size;m++)
+		{
+			if(m==0)
+			{
+				printf("x  %d  ",graph[m].value);
+			}
+			else
+			{
+				printf("%d  ",graph[m].value);
+			}
+		}
+		printf("\n\n");
+		for(m=0;m<size;m++)
+		{
+			printf("%d  ",graph[m].value);
+			for(n=0;n<size;n++)
+			{
+				printf("%d  ",connections[m][n]);
+			}
+			printf("\n\n");
+		}
+	}
 }
-
-/*
- 00 01 02 03 04
- 10 11 12 13 14  
- 20 21 22 23 24
- 30 31 32 33 34
- 40 41 42 44 44
-
-*/
